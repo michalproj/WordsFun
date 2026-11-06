@@ -1,0 +1,75 @@
+# Wzorce wykluczeń (regex JS z flagą u, sprawdzany na małych literach), jeden na linię; # = komentarz.
+# Bez ^ = rdzeń w dowolnym miejscu słowa (łapie przedrostki: wypierdalać, zajebisty, wkurwiać).
+# Zweryfikowane grepem na wyniku — zobacz tools/.cache/blocked.txt po konwersji.
+
+# --- wulgaryzmy ---
+kurw
+kurew
+^(za|wy|o|na|po|roz|s|z|w)?chuj
+^huj
+pierd
+jeb
+pizd
+dup
+gówn
+gown
+sra[cćlłnjkm]
+^cip
+^cyc
+dziwk
+kutas
+kutaf
+fiut
+cwel
+burdel
+pieprzon
+skurwy
+sukinsyn
+^suk(a|i|ą|ę|o|om|ami|ach)$
+^kurde$
+^kurna$
+^choler
+^bzyk
+^kib(el|l)
+^ruch(ać|am|asz|ał|ała|ali|nąć)$
+
+# --- obelgi ---
+^ścierw
+^śmierdziel
+^idio[tc]
+^kretyn
+^debil
+^ciot(a|y|ą|ę|o)$
+^pedał(e)?$
+^zdzir
+^szmat(a|o)$
+^ladacznic
+^bydlak
+
+# --- określenia obraźliwe (etniczne itp., częste w starych lekturach) ---
+murzyn
+^żyd
+^cygan
+^szwab
+^szkop
+^czarnuch
+^kacap
+
+# --- treści dla dorosłych: seks, przemoc seksualna, samobójstwo, używki ---
+^gwałt(u|em|ów|y|ach|ami|owi)?$
+gwałc
+^rozpust
+^kochan(ek|ka|ki|ką|kę|ku|kiem|kowi|kom|ków|kach|kami|ce)$
+^nierząd
+^prostytu
+^seks
+^odbyt$
+^zbocze(ni|ń)
+^samobój
+^narkot
+^wód(k|ecz)
+^papieros
+^alkohol
+^pija(k|cz|ńst)
+^pijan
+^piw(o|a|em|ie|ku|sko)$

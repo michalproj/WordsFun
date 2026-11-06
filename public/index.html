@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wyrazy z literek</title>
+<style>
+  /* --- czcionki hostowane lokalnie (SIL OFL, patrz fonts/OFL.txt) --- */
+  @font-face {
+    font-family: 'Andika'; font-style: normal; font-weight: 400; font-display: swap;
+    src: url(fonts/andika-400-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Andika'; font-style: normal; font-weight: 400; font-display: swap;
+    src: url(fonts/andika-400-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Andika'; font-style: normal; font-weight: 700; font-display: swap;
+    src: url(fonts/andika-700-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Andika'; font-style: normal; font-weight: 700; font-display: swap;
+    src: url(fonts/andika-700-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Baloo 2'; font-style: normal; font-weight: 400 800; font-display: swap;
+    src: url(fonts/baloo2-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Baloo 2'; font-style: normal; font-weight: 400 800; font-display: swap;
+    src: url(fonts/baloo2-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+  :root {
+    --bg: #F3F7FC;
+    --grid: #E3EBF5;
+    --card: #FFFFFF;
+    --line: #DCE3EE;
+    --ink: #1F2A44;
+    --muted: #4A5570;
+    --accent: #FFC93C;
+    --consonant: #1F5FBF;
+    --ok: #2E7D4F;
+    --ok-bg: #E7F4EC;
+    --letter-fg: #5B6478;
+    --letter-bd: #D5DCE8;
+    --ui: 'Baloo 2', system-ui, sans-serif;
+    --script: 'Andika', 'Segoe UI', system-ui, sans-serif;
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font: 16px/1.4 var(--ui);
+  }
+  button { font-family: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible { outline: 3px solid var(--consonant); outline-offset: 3px; }
+  button:disabled { cursor: not-allowed; opacity: .4; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+  .settings-wrap { display: contents; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+
+  .page { max-width: 1232px; margin: 0 auto; padding: 32px 24px 48px; display: flex; flex-direction: column; gap: 24px; }
+
+  /* --- nagłówek --- */
+  .top { display: flex; align-items: center; gap: 16px; }
+  .logo {
+    width: 64px; height: 64px; border-radius: 18px; background: var(--accent);
+    box-shadow: 0 5px 0 rgba(31,42,68,.22);
+    display: flex; align-items: center; justify-content: center; gap: 1px;
+    font-family: var(--script); font-weight: 700; flex-shrink: 0;
+  }
+  .logo .a { font-size: 32px; color: var(--consonant); }
+  .logo .b { font-size: 26px; color: var(--consonant); }
+  h1 { margin: 0; font-size: 40px; line-height: 1.1; font-weight: 800; }
+  .sub { margin: 0; font-size: 18px; color: var(--muted); }
+
+  /* --- karty --- */
+  .layout { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; }
+  .card {
+    background: var(--card); border: 2px solid var(--line); border-radius: 24px;
+    box-shadow: 0 6px 0 var(--line); padding: 28px;
+    display: flex; flex-direction: column; min-width: 0;
+  }
+  .settings { flex: 1 1 440px; max-width: 520px; gap: 22px; }
+  .reading { flex: 999 1 560px; gap: 20px; }
+
+  .step { display: flex; flex-direction: column; gap: 12px; }
+  .step-letters { gap: 14px; }
+  .step-head { display: flex; align-items: center; gap: 12px; }
+  .step-head h3 { margin: 0; font-size: 24px; font-weight: 700; flex-grow: 1; }
+  .num {
+    width: 32px; height: 32px; border-radius: 999px; background: var(--ink); color: #fff;
+    font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .pill { padding: 2px 12px; border-radius: 999px; background: var(--bg); border: 2px solid var(--line); font-size: 16px; font-weight: 600; white-space: nowrap; }
+  .dash { margin: 0; border: 0; border-top: 2px dashed var(--line); }
+
+  .btn {
+    height: 44px; padding: 0 16px; border-radius: 12px; border: 2px solid var(--line);
+    background: var(--bg); font-size: 16px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  /* 1. literki */
+  .letters { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; }
+  .letter {
+    aspect-ratio: 1 / 1; min-height: 44px; padding: 0; border-radius: 14px;
+    border: 2px solid var(--letter-bd); background: #fff; color: var(--letter-fg);
+    box-shadow: 0 3px 0 var(--grid);
+    font-family: var(--script); font-weight: 700;
+    display: flex; align-items: baseline; justify-content: center; gap: 1px;
+  }
+  .letter .up { font-size: 26px; }
+  .letter .low { font-size: 18px; font-weight: 400; }
+  .letter[aria-pressed="true"] { color: #fff; background: var(--ok); border-color: var(--ok); box-shadow: 0 3px 0 rgba(31,42,68,.28); }
+  .letters-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .letters-btns { display: flex; gap: 8px; margin-left: auto; }
+
+  /* 2. długość */
+  .lengths { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; }
+  .stepper { display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 16px; background: var(--bg); border: 2px solid var(--line); }
+  .stepper button { width: 44px; height: 44px; border-radius: 12px; border: 0; background: #fff; font-size: 26px; font-weight: 700; line-height: 1; }
+  .stepper output { min-width: 40px; text-align: center; font-family: var(--script); font-size: 28px; font-weight: 700; }
+
+  /* 3. ile wyrazów */
+  .counts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .counts button { height: 52px; border-radius: 14px; border: 2px solid var(--line); background: #fff; font-size: 22px; font-weight: 700; }
+  .counts button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+  /* losowanie */
+  .draw-box { display: flex; flex-direction: column; gap: 8px; }
+  .draw {
+    height: 72px; border-radius: 20px; border: 0; background: var(--accent);
+    box-shadow: 0 6px 0 rgba(31,42,68,.25);
+    font-size: 28px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .draw:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 rgba(31,42,68,.25); }
+  .match { margin: 0; text-align: center; font-size: 15px; color: var(--muted); }
+  .match strong { color: var(--ink); }
+
+  /* --- czytamy --- */
+  .reading-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .reading-head h2 { margin: 0; font-size: 32px; line-height: 1.15; font-weight: 800; }
+  .reading-head p { margin: 0; font-size: 16px; color: var(--muted); }
+  .progress { display: flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 600; }
+  .progress span { white-space: nowrap; }
+  .bar { flex-grow: 1; height: 14px; border-radius: 999px; background: var(--grid); overflow: hidden; }
+  .bar div { height: 100%; width: 0; border-radius: 999px; background: var(--ok); transition: width .2s; }
+
+  .words { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .words li { display: flex; }
+  .word {
+    position: relative; flex-grow: 1; min-height: 92px; padding: 12px 14px; border-radius: 18px;
+    border: 2px solid var(--line); background: #fff; box-shadow: 0 4px 0 var(--line);
+    font-family: var(--script); font-size: 36px; line-height: 1.1; overflow-wrap: anywhere; color: var(--consonant);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .word[aria-pressed="true"] { background: var(--ok-bg); border-color: var(--ok); box-shadow: 0 4px 0 var(--ok); }
+  .check {
+    position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 999px;
+    background: var(--ok); display: none; align-items: center; justify-content: center;
+  }
+  .word[aria-pressed="true"] .check { display: flex; }
+
+  .empty { padding: 48px 24px; border-radius: 18px; border: 2px dashed var(--line); background: var(--bg); text-align: center; }
+  .empty p { margin: 0; }
+  .empty p:first-child { font-size: 22px; font-weight: 700; }
+  .empty p + p { font-size: 16px; color: var(--muted); }
+  .hint { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--muted); }
+
+  .privacy { margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; color: var(--muted); text-align: center; }
+  .privacy-m, .mobile-bar, .only-m { display: none; }
+
+  /* --- telefon: zakładki + dolny pasek --- */
+  @media (max-width: 640px) {
+    body { background-size: 24px 24px; }
+    .page { padding: 16px 16px calc(150px + env(safe-area-inset-bottom, 0px)); gap: 12px; }
+    .top { gap: 12px; }
+    .logo { width: 44px; height: 44px; border-radius: 13px; box-shadow: 0 3px 0 rgba(31,42,68,.22); }
+    .logo .a { font-size: 22px; }
+    .logo .b { font-size: 18px; }
+    h1 { font-size: 26px; }
+    .sub, .num, .settings .draw-box, .page-footer, #redraw, .only-d { display: none; }
+    .only-m { display: inline; }
+
+    body[data-tab="letters"] .reading, body[data-tab="words"] .settings-wrap { display: none; }
+    .settings-wrap { display: block; width: 100%; }
+    .layout { gap: 0; }
+
+    .card { border-radius: 20px; box-shadow: 0 4px 0 var(--line); padding: 14px; }
+    .settings { max-width: none; gap: 14px; }
+    .step { gap: 8px; }
+    .step-letters { gap: 10px; }
+    .step-head { gap: 8px; }
+    .step-head h3 { font-size: 20px; }
+    .pill { padding: 0 10px; font-size: 14px; }
+    .letters { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+    .letter { aspect-ratio: auto; height: 44px; border-radius: 11px; box-shadow: 0 2px 0 var(--grid); }
+    .letter[aria-pressed="true"] { box-shadow: 0 2px 0 rgba(31,42,68,.28); }
+    .letter .up { font-size: 20px; }
+    .letter .low { font-size: 15px; }
+    .letters-foot { flex-wrap: nowrap; gap: 8px; }
+    .letters-btns { gap: 6px; }
+    .btn { padding: 0 12px; font-size: 15px; }
+    .lengths { justify-content: space-between; gap: 6px; font-size: 16px; }
+    .stepper { gap: 2px; padding: 3px; border-radius: 14px; }
+    .stepper button { border-radius: 11px; font-size: 24px; }
+    .stepper output { min-width: 28px; font-size: 24px; }
+    .counts { gap: 6px; }
+    .counts button { height: 46px; border-radius: 12px; font-size: 20px; }
+    .privacy-m { display: flex; align-items: flex-start; justify-content: flex-start; text-align: left; gap: 6px; margin: 14px 4px 0; font-size: 13px; line-height: 1.4; }
+    .privacy-m svg { margin-top: 2px; }
+
+    .reading { background: none; border: 0; box-shadow: none; padding: 0; gap: 12px; width: 100%; }
+    .reading-head { flex-direction: column; gap: 6px; }
+    .reading-head h2 { font-size: 28px; line-height: 1.1; }
+    .reading-head p { font-size: 15px; }
+    .progress { gap: 10px; font-size: 15px; }
+    .bar { height: 12px; background: var(--line); }
+    .words { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .word { min-height: 76px; padding: 10px; border-radius: 16px; font-size: 30px; box-shadow: 0 3px 0 var(--line); }
+    .word[aria-pressed="true"] { box-shadow: 0 3px 0 var(--ok); }
+    .check { top: 6px; right: 6px; width: 22px; height: 22px; }
+    .empty { padding: 36px 20px; border-radius: 16px; background: #fff; }
+    .empty p:first-child { font-size: 20px; }
+    .empty p + p { font-size: 15px; }
+    .hint { justify-content: center; font-size: 14px; }
+    .hint svg { display: none; }
+
+    .mobile-bar {
+      display: flex; flex-direction: column; gap: 10px;
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+      padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      background: #fff; border-top: 2px solid var(--line);
+    }
+    .mobile-bar .draw { height: 60px; border-radius: 18px; box-shadow: 0 5px 0 rgba(31,42,68,.25); font-size: 24px; gap: 10px; }
+    .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .tabs button {
+      height: 48px; border-radius: 14px; border: 2px solid var(--line); background: #fff;
+      font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .tabs button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .badge {
+      min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px;
+      background: var(--ok); color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center;
+    }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .top, .settings-wrap, .reading-head button, .progress, .hint, .page-footer, .mobile-bar { display: none !important; }
+    body .reading { display: flex !important; border: 0; box-shadow: none; padding: 0; }
+    .word, .word[aria-pressed="true"] { background: none; box-shadow: none; border: 1px solid #ccc; }
+    .check { display: none !important; }
+  }
+</style>
+</head>
+<body data-tab="letters">
+<div class="page">
+  <header class="top">
+    <div class="logo" aria-hidden="true"><span class="a">A</span><span class="b">b</span></div>
+    <div>
+      <h1>Wyrazy z literek</h1>
+      <p class="sub">Zaznacz literki, które już znacie, i losujcie wyrazy do czytania.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="settings-wrap">
+      <section class="card settings" aria-labelledby="h-settings">
+        <h2 id="h-settings" class="sr-only">Ustawienia</h2>
+
+        <div class="step step-letters">
+          <div class="step-head">
+            <span class="num" aria-hidden="true">1</span>
+            <h3>Jakie literki znamy?</h3>
+            <span class="pill" id="known-count">0 / 32</span>
+          </div>
+          <div class="letters" id="letters"></div>
+          <div class="letters-foot">
+            <div class="letters-btns">
+              <button class="btn" id="all" type="button">Wszystkie</button>
+              <button class="btn" id="none" type="button">Wyczyść</button>
+            </div>
+          </div>
+        </div>
+
+        <hr class="dash">
+
+        <div class="step">
+          <div class="step-head">
+            <span class="num" aria-hidden="true">2</span>
+            <h3>Jak długie wyrazy?</h3>
+          </div>
+          <div class="lengths">
+            <span>od</span>
+            <div class="stepper">
+              <button type="button" id="min-dec" aria-label="Mniej liter (od)">−</button>
+              <output id="min-val" aria-live="polite"></output>
+              <button type="button" id="min-inc" aria-label="Więcej liter (od)">+</button>
+            </div>
+            <span>do</span>
+            <div class="stepper">
+              <button type="button" id="max-dec" aria-label="Mniej liter (do)">−</button>
+              <output id="max-val" aria-live="polite"></output>
+              <button type="button" id="max-inc" aria-label="Więcej liter (do)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="num" aria-hidden="true">3</span>
+            <h3>Ile wyrazów?</h3>
+          </div>
+          <div class="counts" id="counts"></div>
+        </div>
+
+        <div class="draw-box">
+          <button class="draw" id="draw" type="button">
+            <svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/><circle cx="16" cy="8" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8" cy="16" r="1.3" fill="currentColor"/><circle cx="16" cy="16" r="1.3" fill="currentColor"/></svg>
+            <span class="draw-label">Losuj 20 wyrazów</span>
+          </button>
+          <p class="match">Pasuje teraz: <strong class="match-count">…</strong></p>
+        </div>
+      </section>
+
+      <p class="privacy privacy-m">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2E7D4F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <span>Wybrane literki i długość zapamiętujemy tylko w tej przeglądarce. Nie zbieramy danych i niczego nie wysyłamy.</span>
+      </p>
+    </div>
+
+    <section class="card reading" aria-labelledby="h-words">
+      <div class="reading-head">
+        <div>
+          <h2 id="h-words">Czytamy!</h2>
+          <p id="drawn-text" aria-live="polite"></p>
+        </div>
+        <button class="btn" id="redraw" type="button">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>
+          Losuj znowu
+        </button>
+      </div>
+
+      <div class="progress">
+        <span id="progress-text">Przeczytane: 0 z 0</span>
+        <div class="bar" aria-hidden="true"><div id="bar-fill"></div></div>
+      </div>
+
+      <ul class="words" id="words"></ul>
+      <div class="empty" id="empty" hidden>
+        <p id="empty-title">Z tych literek nie ułożymy jeszcze wyrazu</p>
+        <p id="empty-sub">Zaznacz więcej literek albo zmień długość<span class="only-d"> wyrazów</span>.</p>
+      </div>
+
+      <p class="hint">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+        <span class="only-d">Kliknij wyraz, gdy ktoś go przeczyta – zrobi się zielony.</span>
+        <span class="only-m">Dotknij wyrazu, gdy ktoś go przeczyta.</span>
+      </p>
+    </section>
+  </main>
+
+  <footer class="privacy page-footer">
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2E7D4F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    <span>Wybrane literki i długość wyrazów zapamiętujemy tylko w tej przeglądarce. Nie zbieramy żadnych danych i niczego nie wysyłamy.</span>
+  </footer>
+</div>
+
+<div class="mobile-bar">
+  <button class="draw" id="draw-m" type="button">
+    <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/><circle cx="16" cy="8" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8" cy="16" r="1.3" fill="currentColor"/><circle cx="16" cy="16" r="1.3" fill="currentColor"/></svg>
+    <span class="draw-label">Losuj 20 wyrazów</span>
+  </button>
+  <nav class="tabs" aria-label="Widoki">
+    <button type="button" id="tab-letters" aria-pressed="true">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Literki
+    </button>
+    <button type="button" id="tab-words" aria-pressed="false">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>
+      Wyrazy
+      <span class="badge" id="tab-count">0</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+(() => {
+  const ALPHABET = [...'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'];
+  const COUNTS = [10, 20, 30];
+  const MIN_LEN = 2, MAX_LEN = 15;
+  const DEFAULT = { min: 4, max: 10, count: 20 };
+  const STORAGE_KEY = 'wyrazy-z-literek';
+
+  const $ = id => document.getElementById(id);
+  const $$ = sel => document.querySelectorAll(sel);
+  const upper = c => c.toLocaleUpperCase('pl');
+
+  // --- stan zapamiętywany w localStorage: literki, długość, liczba wyrazów ---
+  function parse(str) {
+    const p = new URLSearchParams(str);
+    if (![...p.keys()].length) return null;
+    const clamp = (v, d) => {
+      const n = parseInt(v, 10);
+      return Number.isFinite(n) ? Math.min(MAX_LEN, Math.max(MIN_LEN, n)) : d;
+    };
+    const n = parseInt(p.get('n'), 10);
+    const s = {
+      letters: new Set([...(p.get('l') || '')].filter(c => ALPHABET.includes(c))),
+      min: clamp(p.get('min'), DEFAULT.min),
+      max: clamp(p.get('max'), DEFAULT.max),
+      count: COUNTS.includes(n) ? n : DEFAULT.count,
+    };
+    if (s.min > s.max) [s.min, s.max] = [s.max, s.min];
+    return s;
+  }
+  function serialize(s) {
+    const l = ALPHABET.filter(c => s.letters.has(c)).join('');
+    return `l=${l}&min=${s.min}&max=${s.max}&n=${s.count}`;
+  }
+  function loadState() {
+    try {
+      const saved = parse(localStorage.getItem(STORAGE_KEY) || '');
+      if (saved) return saved;
+    } catch {}
+    return { ...DEFAULT, letters: new Set() };
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, serialize(state)); } catch {}
+  }
+
+  const state = loadState();
+  let drawn = [];          // aktualnie pokazane wyrazy
+  let drawnFrom = 0;       // z ilu pasujących losowano
+  let read = new Set();    // indeksy przeczytanych wyrazów
+  let hasDrawn = false;
+
+  // --- słownik: pliki words/NN.txt pobierane leniwie ---
+  const fileCache = new Map();
+  function loadLength(len) {
+    if (!fileCache.has(len)) {
+      const name = String(len).padStart(2, '0');
+      const p = fetch(`words/${name}.txt`)
+        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
+        .then(t => t.split('\n').filter(Boolean));
+      p.catch(() => fileCache.delete(len));
+      fileCache.set(len, p);
+    }
+    return fileCache.get(len);
+  }
+
+  const currentKey = () => `${ALPHABET.filter(c => state.letters.has(c)).join('')}|${state.min}|${state.max}`;
+  let matchCache = { key: null, words: null };
+  async function matchingWords() {
+    const key = currentKey();
+    if (matchCache.key === key) return matchCache.words;
+    const letters = key.split('|')[0];
+    if (!letters) return [];
+    const lens = [];
+    for (let n = state.min; n <= state.max; n++) lens.push(n);
+    const lists = await Promise.all(lens.map(loadLength));
+    const re = new RegExp(`^[${letters}]+$`);
+    const out = [];
+    for (const list of lists) for (const w of list) if (re.test(w)) out.push(w);
+    matchCache = { key, words: out };
+    return out;
+  }
+
+  function sample(arr, k) {
+    const a = arr.slice();
+    const n = Math.min(k, a.length);
+    for (let i = 0; i < n; i++) {
+      const j = i + Math.floor(Math.random() * (a.length - i));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a.slice(0, n);
+  }
+  function plural(n) {
+    const d = n % 10, h = n % 100;
+    if (n === 1) return 'wyraz';
+    if (d >= 2 && d <= 4 && !(h >= 12 && h <= 14)) return 'wyrazy';
+    return 'wyrazów';
+  }
+  const nWords = n => `${n.toLocaleString('pl')} ${plural(n)}`;
+
+  // --- ustawienia ---
+  function renderLetters() {
+    const box = $('letters');
+    for (const c of ALPHABET) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'letter';
+      b.dataset.c = c;
+      b.innerHTML = '<span class="up"></span><span class="low"></span>';
+      b.firstChild.textContent = upper(c);
+      b.lastChild.textContent = c;
+      b.addEventListener('click', () => {
+        state.letters.has(c) ? state.letters.delete(c) : state.letters.add(c);
+        settingsChanged();
+      });
+      box.appendChild(b);
+    }
+  }
+  function updateLetters() {
+    for (const b of $('letters').children) {
+      const on = state.letters.has(b.dataset.c);
+      b.setAttribute('aria-pressed', on);
+      b.setAttribute('aria-label', upper(b.dataset.c) + (on ? ', znamy' : ', jeszcze nie znamy'));
+    }
+    $('known-count').textContent = `${state.letters.size} / ${ALPHABET.length}`;
+  }
+  function updateLengths() {
+    $('min-val').textContent = state.min;
+    $('max-val').textContent = state.max;
+    $('min-dec').disabled = state.min <= MIN_LEN;
+    $('min-inc').disabled = state.min >= state.max;
+    $('max-dec').disabled = state.max <= state.min;
+    $('max-inc').disabled = state.max >= MAX_LEN;
+  }
+  function renderCounts() {
+    for (const n of COUNTS) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = n;
+      b.dataset.n = n;
+      b.addEventListener('click', () => { state.count = n; settingsChanged(); });
+      $('counts').appendChild(b);
+    }
+  }
+  function updateCounts() {
+    for (const b of $('counts').children) b.setAttribute('aria-pressed', +b.dataset.n === state.count);
+    for (const el of $$('.draw-label')) el.textContent = `Losuj ${nWords(state.count)}`;
+  }
+
+  let matchSeq = 0;
+  async function updateMatchCount() {
+    const seq = ++matchSeq;
+    const set = t => { for (const el of $$('.match-count')) el.textContent = t; };
+    if (matchCache.key !== currentKey()) set('…');
+    try {
+      const all = await matchingWords();
+      if (seq === matchSeq) set(nWords(all.length));
+    } catch {
+      if (seq === matchSeq) set('nie udało się wczytać słownika');
+    }
+  }
+
+  function settingsChanged() {
+    saveState();
+    updateLetters();
+    updateLengths();
+    updateCounts();
+    updateMatchCount();
+  }
+
+  // --- losowanie i czytanie ---
+  async function draw(switchTab = true) {
+    const btns = [$('draw'), $('draw-m'), $('redraw')];
+    btns.forEach(b => b.disabled = true);
+    try {
+      const all = await matchingWords();
+      drawn = sample(all, state.count);
+      drawnFrom = all.length;
+      read = new Set();
+      hasDrawn = true;
+      renderWords();
+    } catch (e) {
+      $('drawn-text').textContent = 'Nie udało się wczytać słownika (' + e.message + '). Spróbuj ponownie.';
+    } finally {
+      btns.forEach(b => b.disabled = false);
+    }
+    if (switchTab) setTab('words');
+  }
+
+  function renderWords() {
+    const ul = $('words');
+    ul.textContent = '';
+    drawn.forEach((w, i) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'word';
+      const span = document.createElement('span');
+      span.textContent = w;
+      b.appendChild(span);
+      b.insertAdjacentHTML('beforeend', '<span class="check" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>');
+      const sync = () => {
+        const r = read.has(i);
+        b.setAttribute('aria-pressed', r);
+        b.setAttribute('aria-label', w + (r ? ', przeczytane' : ''));
+      };
+      b.addEventListener('click', () => {
+        read.has(i) ? read.delete(i) : read.add(i);
+        sync();
+        updateProgress();
+      });
+      sync();
+      li.appendChild(b);
+      ul.appendChild(li);
+    });
+    ul.hidden = !drawn.length;
+    $('empty').hidden = drawn.length > 0;
+    if (!hasDrawn) {
+      $('empty-title').textContent = 'Tu pojawią się wyrazy do czytania';
+      $('empty-sub').textContent = 'Zaznacz literki, które już znacie, i kliknij „Losuj”.';
+    } else if (!drawn.length) {
+      $('empty-title').textContent = 'Z tych literek nie ułożymy jeszcze wyrazu';
+      $('empty-sub').textContent = 'Zaznacz więcej literek albo zmień długość wyrazów.';
+    }
+    $('drawn-text').textContent = hasDrawn
+      ? `Wylosowano ${drawn.length} z ${drawnFrom.toLocaleString('pl')} pasujących`
+      : 'Jeszcze nic nie wylosowano.';
+    $('tab-count').textContent = drawn.length;
+    updateProgress();
+  }
+  function updateProgress() {
+    const total = drawn.length, n = read.size;
+    $('progress-text').textContent = `Przeczytane: ${n} z ${total}`;
+    $('bar-fill').style.width = (total ? Math.round(n / total * 100) : 0) + '%';
+  }
+
+  // --- zakładki (tylko telefon) ---
+  function setTab(t) {
+    document.body.dataset.tab = t;
+    $('tab-letters').setAttribute('aria-pressed', t === 'letters');
+    $('tab-words').setAttribute('aria-pressed', t === 'words');
+  }
+
+  // --- start ---
+  renderLetters();
+  renderCounts();
+  updateLetters();
+  updateLengths();
+  updateCounts();
+  renderWords();
+  updateMatchCount();
+
+  $('all').addEventListener('click', () => { state.letters = new Set(ALPHABET); settingsChanged(); });
+  $('none').addEventListener('click', () => { state.letters = new Set(); settingsChanged(); });
+  $('min-dec').addEventListener('click', () => { state.min = Math.max(MIN_LEN, state.min - 1); settingsChanged(); });
+  $('min-inc').addEventListener('click', () => { state.min = Math.min(state.max, state.min + 1); settingsChanged(); });
+  $('max-dec').addEventListener('click', () => { state.max = Math.max(state.min, state.max - 1); settingsChanged(); });
+  $('max-inc').addEventListener('click', () => { state.max = Math.min(MAX_LEN, state.max + 1); settingsChanged(); });
+  $('draw').addEventListener('click', () => draw());
+  $('draw-m').addEventListener('click', () => draw());
+  $('redraw').addEventListener('click', () => draw());
+  $('tab-letters').addEventListener('click', () => setTab('letters'));
+  $('tab-words').addEventListener('click', () => setTab('words'));
+
+  if (state.letters.size) draw(false);
+})();
+</script>
+</body>
+</html>

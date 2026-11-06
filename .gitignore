@@ -1,0 +1,6 @@
+# źródłowy słownik (Windows-1250) — commitujemy tylko przekonwertowane public/words/
+slownik.txt
+*.cp1250.txt
+node_modules/
+tools/.cache/
+PolishCDS.xlsx
